@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
 import {stdJson} from "forge-std/StdJson.sol";
-import {PdfVerifier} from "../src/PdfVerifier.sol";
+import {PdfVerifier, PublicValuesStruct} from "../src/PdfVerifier.sol";
 import {SP1VerifierGateway} from "@sp1-contracts/SP1VerifierGateway.sol";
 
 struct SP1ProofFixtureJson {
@@ -41,7 +41,7 @@ contract PdfVerifierGroth16Test is Test {
 
         PublicValuesStruct memory expected = abi.decode(fixture.publicValues, (PublicValuesStruct));
         PublicValuesStruct memory publicValues = pdfVerifier.verifyPdfProof(fixture.publicValues, fixture.proof);
-        assertTrue(publicValues.substringMatches == fixture.substringMatches);
+        assertEq(publicValues.substringMatches, fixture.substringMatches);
         assertEq(publicValues.messageDigestHash, expected.messageDigestHash);
         assertEq(publicValues.signerKeyHash, expected.signerKeyHash);
         assertEq(publicValues.substringHash, expected.substringHash);
@@ -57,6 +57,12 @@ contract PdfVerifierGroth16Test is Test {
 
         pdfVerifier.verifyPdfProof(fixture.publicValues, fakeProof);
     }
+
+    function testRevert_ZeroVerifierAddress() public {
+        SP1ProofFixtureJson memory fixture = loadFixture();
+        vm.expectRevert("PdfVerifier: zero verifier address");
+        new PdfVerifier(address(0), fixture.vkey);
+    }
 }
 
 contract PdfVerifierPlonkTest is Test {
@@ -67,7 +73,7 @@ contract PdfVerifierPlonkTest is Test {
 
     function loadFixture() public view returns (SP1ProofFixtureJson memory) {
         string memory root = vm.projectRoot();
-        string memory path = string.concat(root, "/src/fixtures/plonk-fixture.json");
+        string memory path = string.concat(root, "/src/fixtures/groth16-fixture.json");
         string memory json = vm.readFile(path);
         bytes memory jsonBytes = json.parseRaw(".");
         return abi.decode(jsonBytes, (SP1ProofFixtureJson));
@@ -87,7 +93,7 @@ contract PdfVerifierPlonkTest is Test {
 
         PublicValuesStruct memory expected = abi.decode(fixture.publicValues, (PublicValuesStruct));
         PublicValuesStruct memory publicValues = pdfVerifier.verifyPdfProof(fixture.publicValues, fixture.proof);
-        assertTrue(publicValues.substringMatches == fixture.substringMatches);
+        assertEq(publicValues.substringMatches, fixture.substringMatches);
         assertEq(publicValues.messageDigestHash, expected.messageDigestHash);
         assertEq(publicValues.signerKeyHash, expected.signerKeyHash);
         assertEq(publicValues.substringHash, expected.substringHash);
