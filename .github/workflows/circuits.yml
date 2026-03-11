@@ -1,0 +1,40 @@
+name: Circuits CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "circuits/**"
+      - "pdf-utils/**"
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - "circuits/**"
+      - "pdf-utils/**"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source "$HOME/.cargo/env"
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Build circuits library
+        working-directory: circuits
+        run: cargo build -p zkpdf-lib --verbose
+
+      - name: Test circuits library
+        working-directory: circuits
+        run: cargo test -p zkpdf-lib --verbose
