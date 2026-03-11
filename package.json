@@ -1,0 +1,17 @@
+{
+  "name": "zkpdf",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "app"
+  ],
+  "scripts": {
+    "dev": "yarn workspace zkpdf-frontend dev",
+    "build": "yarn workspace zkpdf-frontend build",
+    "start": "yarn workspace zkpdf-frontend start",
+    "lint": "yarn workspace zkpdf-frontend lint",
+    "test": "yarn workspace zkpdf-frontend lint"
+  },
+  "repository": "https://github.com/Kushmanmb/kushmanmb",
+  "license": "MIT"
+}

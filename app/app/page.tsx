@@ -495,7 +495,7 @@ For more details, see: circuits/README.md`);
                   <div>1. Upload PDF to extract text first</div>
                   <div>2. Enter the exact text you want to find</div>
                   <div>3. Specify which page (0-based index)</div>
-                  <div>4. Click "Verify Substring" to check</div>
+                  <div>4. Click &quot;Verify Substring&quot; to check</div>
                   <div className="text-yellow-300 font-medium">
                     Note: Offset is calculated automatically!
                   </div>
@@ -614,7 +614,7 @@ For more details, see: circuits/README.md`);
                         : "❌ Not Found"}
                     </div>
                     <div className="text-sm text-gray-300">
-                      Text: "{substringCheck.text}" found at offset{" "}
+                      Text: &quot;{substringCheck.text}&quot; found at offset{" "}
                       {calculatedOffset}
                     </div>
                     {calculatedOffset !== null && (
@@ -650,7 +650,7 @@ For more details, see: circuits/README.md`);
           {publicKeyPEM && (
             <div className="flex-1 bg-gray-700 p-4 rounded overflow-auto">
               <div className="font-medium text-indigo-300 mb-2">
-                Signer's Public Key:
+                Signer&apos;s Public Key:
               </div>
               <pre className="bg-gray-600 p-2 rounded text-xs whitespace-pre-wrap">
                 {publicKeyPEM}
