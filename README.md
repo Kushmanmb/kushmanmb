@@ -127,6 +127,57 @@ https://github.com/user-attachments/assets/
 - Selectively reveal fields from government-issued certificates
 - Use verified document facts in smart contracts
 
+## Smart Contract
+
+The on-chain verifier contract is located at
+[`circuits/contracts/src/PdfVerifier.sol`](circuits/contracts/src/PdfVerifier.sol).
+
+It exposes a single entry-point:
+
+```solidity
+function verifyPdfProof(
+    bytes calldata _publicValues,
+    bytes calldata _proofBytes
+) external returns (PublicValuesStruct memory publicValues);
+```
+
+Where `PublicValuesStruct` carries five attested fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `substringMatches` | `bool` | True when the substring was found at the given page/offset |
+| `messageDigestHash` | `bytes32` | keccak256 of the PDF's PKCS#7 message digest |
+| `signerKeyHash` | `bytes32` | keccak256 of the signer's RSA public key |
+| `substringHash` | `bytes32` | keccak256 of the queried substring |
+| `nullifier` | `bytes32` | Domain-separated nullifier preventing proof replay |
+
+### Verifying the Contract on Etherscan
+
+See [`circuits/contracts/README.md`](circuits/contracts/README.md) for full
+deployment and Etherscan verification instructions.
+
+## Security
+
+### Audit Summary
+
+A code security audit was performed covering the Solidity contract, Rust
+circuit library, and prover/verifier scripts. The following issues were
+identified and remediated:
+
+| # | Severity | Location | Issue | Status |
+|---|----------|----------|-------|--------|
+| 1 | **High** | `PdfVerifier.sol` | `PublicValuesStruct` had only `bool result` — mismatched ABI would cause incorrect decoding of all proof outputs | ✅ Fixed |
+| 2 | **High** | `PdfVerifier.sol` | `verifyPdfProof` returned `bool` instead of `PublicValuesStruct` — callers had no access to hashes or nullifier | ✅ Fixed |
+| 3 | **Medium** | `PdfVerifier.sol` | No zero-address check on `_verifier` constructor argument — `address(0)` would make all proof calls silently succeed | ✅ Fixed |
+| 4 | **Medium** | `PdfVerifier.sol` | `verifier` and `programVKey` were mutable storage variables — a compromised deployer key could swap the verifier for a malicious contract | ✅ Fixed (marked `immutable`) |
+| 5 | **Low** | `PdfVerifier.sol` | No events emitted — on-chain verification activity was unmonitorable | ✅ Fixed (`PdfProofVerified` event added) |
+| 6 | **Low** | `PdfVerifier.t.sol` | Test file referenced undefined struct fields and mismatched return type causing test suite to not compile | ✅ Fixed |
+| 7 | **Info** | `foundry.toml` | No Etherscan API configuration — contract verification required manual CLI flags | ✅ Fixed |
+
+> **Responsible Disclosure:** To report a security vulnerability, please
+> e-mail **security@example.com** (also declared via `@custom:security-contact`
+> in the contract NatSpec).
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

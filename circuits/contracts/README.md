@@ -51,11 +51,47 @@ PRIVATE_KEY=...
 Then deploy the contract to the chain:
 
 ```sh
-forge create src/PdfVerifier.sol:PdfVerifier --rpc-url $RPC_URL --private-key $PRIVATE_KEY --constructor-args $VERIFIER $PROGRAM_VKEY
+forge create src/PdfVerifier.sol:PdfVerifier \
+  --rpc-url $RPC_URL \
+  --private-key $PRIVATE_KEY \
+  --constructor-args $VERIFIER $PROGRAM_VKEY
 ```
 
-It can also be a good idea to verify the contract when you deploy, in which case you would also need to set `ETHERSCAN_API_KEY`:
+## Etherscan Verification
+
+Verifying the deployed contract on Etherscan allows anyone to inspect the
+source code and ABI directly from the block explorer.
+
+#### Option A: Verify at deploy time (recommended)
+
+Pass `--verify` together with your Etherscan API key when deploying:
 
 ```sh
-forge create src/PdfVerifier.sol:PdfVerifier --rpc-url $RPC_URL --private-key $PRIVATE_KEY --constructor-args $VERIFIER $PROGRAM_VKEY --verify --verifier etherscan --etherscan-api-key $ETHERSCAN_API_KEY
+forge create src/PdfVerifier.sol:PdfVerifier \
+  --rpc-url $RPC_URL \
+  --private-key $PRIVATE_KEY \
+  --constructor-args $VERIFIER $PROGRAM_VKEY \
+  --verify \
+  --verifier etherscan \
+  --etherscan-api-key $ETHERSCAN_API_KEY
 ```
+
+#### Option B: Verify an already-deployed contract
+
+If the contract is already deployed, provide its address and the constructor
+arguments used at deployment:
+
+```sh
+forge verify-contract \
+  --chain-id 1 \
+  --constructor-args $(cast abi-encode "constructor(address,bytes32)" $VERIFIER $PROGRAM_VKEY) \
+  --etherscan-api-key $ETHERSCAN_API_KEY \
+  <DEPLOYED_CONTRACT_ADDRESS> \
+  src/PdfVerifier.sol:PdfVerifier
+```
+
+Replace `--chain-id 1` with `11155111` for Sepolia.
+
+> **Tip:** `ETHERSCAN_API_KEY` can also be set permanently in `foundry.toml`
+> under `[etherscan]` (already configured for `mainnet` and `sepolia`).
+
