@@ -1,3 +1,6 @@
+<img width="1280" height="1280" alt="image" src="https://github.com/user-attachments/assets/25c7d036-1c00-4ca0-9a9d-8db60e8a8ebb" />
+
+
 # Hi there, I'm Kushmanmb 👋
 
 **Blockchain Software Engineer | Smart Contract Developer | Bitcoin & Ethereum Protocol Specialist**
