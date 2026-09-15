@@ -34,7 +34,9 @@ function getWasmModuleUrl() {
     pathPrefix += basePath;
   }
 
-  return new URL(`${pathPrefix}/pkg/wasm.js`, assetPrefixUrl.origin).toString();
+  assetPrefixUrl.pathname = `${pathPrefix}/pkg/wasm.js`;
+
+  return assetPrefixUrl.toString();
 }
 
 let mod: WasmModule | null = null;
