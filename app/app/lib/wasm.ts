@@ -24,32 +24,13 @@ type WasmModule = {
   wasm_verify_and_extract: (bytes: Uint8Array) => WasmVerificationResult;
 };
 
-type NextWindow = Window & {
-  __NEXT_DATA__?: {
-    assetPrefix?: string;
-  };
-};
-
 function getWasmModuleUrl() {
   if (typeof window === "undefined") {
     return "/pkg/wasm.js";
   }
 
-  const nextWindow = window as NextWindow;
-  const assetPrefixUrl = new URL(
-    nextWindow.__NEXT_DATA__?.assetPrefix || "/",
-    window.location.origin
-  );
-  const basePath = process.env.__NEXT_ROUTER_BASEPATH?.replace(/\/$/, "") || "";
-  let pathPrefix = assetPrefixUrl.pathname.replace(/\/$/, "");
-
-  if (basePath && !pathPrefix.endsWith(basePath)) {
-    pathPrefix += basePath;
-  }
-
-  assetPrefixUrl.pathname = `${pathPrefix}/pkg/wasm.js`;
-
-  return assetPrefixUrl.toString();
+  const basePath = document.body?.dataset.basePath?.replace(/\/$/, "") || "";
+  return new URL(`${basePath}/pkg/wasm.js`, window.location.origin).toString();
 }
 
 let mod: WasmModule | null = null;
