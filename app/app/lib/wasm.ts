@@ -23,13 +23,18 @@ function getWasmModuleUrl() {
   }
 
   const nextWindow = window as NextWindow;
-  const prefix =
-    nextWindow.__NEXT_DATA__?.assetPrefix ??
-    nextWindow.__NEXT_DATA__?.basePath ??
-    "";
-  const normalizedPrefix = prefix.endsWith("/") ? prefix.slice(0, -1) : prefix;
+  const assetPrefixUrl = new URL(
+    nextWindow.__NEXT_DATA__?.assetPrefix || "/",
+    window.location.origin
+  );
+  const basePath = nextWindow.__NEXT_DATA__?.basePath?.replace(/\/$/, "") || "";
+  let pathPrefix = assetPrefixUrl.pathname.replace(/\/$/, "");
 
-  return new URL(`${normalizedPrefix}/pkg/wasm.js`, window.location.origin).toString();
+  if (basePath && !pathPrefix.endsWith(basePath)) {
+    pathPrefix += basePath;
+  }
+
+  return new URL(`${pathPrefix}/pkg/wasm.js`, assetPrefixUrl.origin).toString();
 }
 
 let mod: WasmModule | null = null;
