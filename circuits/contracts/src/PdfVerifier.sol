@@ -4,7 +4,11 @@ pragma solidity ^0.8.20;
 import {ISP1Verifier} from "@sp1-contracts/ISP1Verifier.sol";
 
 struct PublicValuesStruct {
-    bool result;
+    bool substringMatches;
+    bytes32 messageDigestHash;
+    bytes32 signerKeyHash;
+    bytes32 substringHash;
+    bytes32 nullifier;
 }
 
 /// @title PdfVerifier
@@ -27,7 +31,7 @@ contract PdfVerifier {
     function verifyPdfProof(
         bytes calldata _publicValues,
         bytes calldata _proofBytes
-    ) public view returns (bool) {
+    ) public view returns (PublicValuesStruct memory) {
         ISP1Verifier(verifier).verifyProof(
             programVKey,
             _publicValues,
@@ -37,6 +41,6 @@ contract PdfVerifier {
             _publicValues,
             (PublicValuesStruct)
         );
-        return publicValues.result;
+        return publicValues;
     }
 }
