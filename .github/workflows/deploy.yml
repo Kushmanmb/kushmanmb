@@ -97,7 +97,7 @@ jobs:
 
       - name: Download uploaded Pages artifact
         run: |
-          curl -sSL \
+          curl -fsSL \
             -u "x-access-token:$GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             "${{ github.api_url }}/repos/${{ github.repository }}/actions/artifacts/${{ steps.resolve-pages-artifact.outputs.artifact-id }}/zip" \
