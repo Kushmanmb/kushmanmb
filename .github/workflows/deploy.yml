@@ -68,7 +68,7 @@ jobs:
           path: ./combined-deploy
 
       - name: Download uploaded Pages artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4.1.3
         with:
           artifact-ids: ${{ steps.pages_artifact.outputs.artifact_id }}
           path: ${{ runner.temp }}/github-pages-artifact
