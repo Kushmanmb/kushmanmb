@@ -80,9 +80,13 @@ jobs:
               }
             );
 
-            const artifact = [...data.artifacts]
-              .reverse()
-              .find((item) => item.name === "github-pages");
+            const artifact = data.artifacts
+              .filter((item) => item.name === "github-pages")
+              .sort(
+                (left, right) =>
+                  new Date(right.created_at).getTime() -
+                  new Date(left.created_at).getTime()
+              )[0];
 
             if (!artifact) {
               core.setFailed("Unable to locate uploaded github-pages artifact.");
