@@ -68,25 +68,15 @@ jobs:
           path: ./combined-deploy
 
       - name: Download uploaded Pages artifact
-        run: |
-          ARTIFACT_ID="${{ steps.pages_artifact.outputs.artifact_id }}"
-          if [ -z "$ARTIFACT_ID" ]; then
-            echo "Unable to resolve uploaded github-pages artifact ID."
-            exit 1
-          fi
-
-          curl -fsSL \
-            -u "x-access-token:$GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "${{ github.api_url }}/repos/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/zip" \
-            -o "$RUNNER_TEMP/github-pages-artifact.zip"
-        env:
-          GH_TOKEN: ${{ github.token }}
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ steps.pages_artifact.outputs.artifact_id }}
+          path: ${{ runner.temp }}/github-pages-artifact
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: ${{ runner.temp }}/github-pages-artifact.zip
+          subject-path: ${{ runner.temp }}/github-pages-artifact/**/*
 
       - name: Deploy to GitHub Pages
         id: deployment
