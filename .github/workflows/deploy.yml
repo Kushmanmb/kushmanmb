@@ -60,15 +60,28 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Archive combined artifact
+        run: |
+          tar \
+            --dereference --hard-dereference \
+            --directory "./combined-deploy" \
+            -cvf "$RUNNER_TEMP/github-pages.tar" \
+            --exclude=.git \
+            --exclude=.github \
+            .
+
       - name: Upload combined artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          path: ./combined-deploy
+          name: github-pages
+          path: ${{ runner.temp }}/github-pages.tar
+          retention-days: 1
+          if-no-files-found: error
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: ${{ runner.temp }}/artifact.tar
+          subject-path: ${{ runner.temp }}/github-pages.tar
 
       - name: Deploy to GitHub Pages
         id: deployment
