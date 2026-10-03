@@ -1,7 +1,6 @@
 [book]
 authors = ["Kushmanmb"]
 language = "en"
-multilingual = false
 src = "src"
 title = "ZKPDF Documentation"
 
