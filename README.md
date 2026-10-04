@@ -83,21 +83,7 @@ Tools for verifying PDF documents within zero-knowledge proof systems. Enables p
 
 ## 📊 GitHub Activity
 
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=Kushmanmb&show_icons=true&theme=radical&hide_border=true&include_all_commits=true&count_private=true&rank_icon=github" alt="Kushmanmb's GitHub Stats" />
-</p>
-
-<p align="center">
-  <img src="https://streak-stats.demolab.com/?user=Kushmanmb&theme=radical&hide_border=true" alt="Kushmanmb's GitHub Streak" />
-</p>
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Kushmanmb&layout=compact&theme=radical&hide_border=true&langs_count=10" alt="Kushmanmb's Top Languages" />
-</p>
-
-<p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=Kushmanmb&theme=radical&no-frame=true&no-bg=true&margin-w=8&margin-h=8&column=4" alt="Kushmanmb's GitHub Trophies" />
-</p>
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Kushmanmb&show_icons=true&theme=radical)
 
 ---
 
