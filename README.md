@@ -83,7 +83,7 @@ Tools for verifying PDF documents within zero-knowledge proof systems. Enables p
 
 ## 📊 GitHub Activity
 
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Kushmanmb&show_icons=true&theme=radical)
+![GitHub Stats](profile/stats.svg)
 
 ---
 
