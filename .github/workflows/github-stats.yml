@@ -22,7 +22,7 @@ jobs:
       - name: Generate GitHub stats
         run: |
           curl -L --fail --retry 3 \
-            "https://github-readme-stats.vercel.app/api?username=Kushmanmb&show_icons=true&theme=radical&hide_border=true&include_all_commits=true" \
+            "https://github-readme-stats.vercel.app/api?username=Kushmanmb&show_icons=true&theme=radical&hide_border=true" \
             -o profile/stats.svg
 
       - name: Commit generated stats
