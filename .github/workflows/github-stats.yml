@@ -4,9 +4,6 @@ on:
   schedule:
     - cron: "0 6 * * *"
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 permissions:
   contents: write
@@ -19,9 +16,25 @@ jobs:
       - name: Checkout profile repository
         uses: actions/checkout@v4
 
+      - name: Create profile directory
+        run: mkdir -p profile
+
       - name: Generate GitHub stats
-        uses: anuraghazra/github-readme-stats@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: profile/stats.svg
-          options: username=Kushmanmb&show_icons=true&theme=radical&hide_border=true&include_all_commits=true
+        run: |
+          curl -L --fail --retry 3 \
+            "https://github-readme-stats.vercel.app/api?username=Kushmanmb&show_icons=true&theme=radical&hide_border=true&include_all_commits=true" \
+            -o profile/stats.svg
+
+      - name: Commit generated stats
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add profile/stats.svg
+
+          if git diff --cached --quiet; then
+            echo "No stats changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Update GitHub activity stats"
+          git push
