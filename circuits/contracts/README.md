@@ -54,8 +54,21 @@ Then deploy the contract to the chain:
 forge create src/PdfVerifier.sol:PdfVerifier --rpc-url $RPC_URL --private-key $PRIVATE_KEY --constructor-args $VERIFIER $PROGRAM_VKEY
 ```
 
-It can also be a good idea to verify the contract when you deploy, in which case you would also need to set `ETHERSCAN_API_KEY`:
+#### Step 4: Verify the contract (optional)
+
+If you deployed without the `--verify` flag, or if you need to verify a contract that was already deployed, use `forge verify-contract`:
 
 ```sh
-forge create src/PdfVerifier.sol:PdfVerifier --rpc-url $RPC_URL --private-key $PRIVATE_KEY --constructor-args $VERIFIER $PROGRAM_VKEY --verify --verifier etherscan --etherscan-api-key $ETHERSCAN_API_KEY
+ETHERSCAN_API_KEY=...
+DEPLOYED_ADDRESS=...  # the address returned by forge create
 ```
+
+```sh
+forge verify-contract $DEPLOYED_ADDRESS \
+  src/PdfVerifier.sol:PdfVerifier \
+  --rpc-url $RPC_URL \
+  --verifier etherscan \
+  --etherscan-api-key $ETHERSCAN_API_KEY \
+  --constructor-args $(cast abi-encode "constructor(address,bytes32)" $VERIFIER $PROGRAM_VKEY)
+```
+

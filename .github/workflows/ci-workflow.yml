@@ -29,8 +29,11 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Install dependencies
-        run: yarn install
+      - name: Enable Corepack
+        run: corepack enable
 
-      - name: Run tests
-        run: yarn test
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build
+        run: yarn build
