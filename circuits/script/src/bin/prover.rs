@@ -1,12 +1,12 @@
 use axum::{routing::post, serve, Json, Router};
 use serde::{Deserialize, Serialize};
-use sp1_sdk::{include_elf, ProverClient, SP1ProofWithPublicValues, SP1Stdin};
+use sp1_sdk::{include_elf, ProveRequest, Prover, ProvingKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin};
 use std::net::SocketAddr;
 use tokio::net::TcpListener;
 use tower_http::cors::{Any, CorsLayer};
 use zkpdf_lib::types::PDFCircuitInput;
 
-pub const ZKPDF_ELF: &[u8] = include_elf!("zkpdf-program");
+pub const ZKPDF_ELF: sp1_sdk::Elf = include_elf!("zkpdf-program");
 
 #[derive(Deserialize)]
 struct ProofRequest {
@@ -23,8 +23,8 @@ struct VerifyResponse {
 }
 
 async fn prove(Json(body): Json<ProofRequest>) -> Json<SP1ProofWithPublicValues> {
-    let client = ProverClient::from_env();
-    let (pk, _vk) = client.setup(ZKPDF_ELF);
+    let client = ProverClient::from_env().await;
+    let pk = client.setup(ZKPDF_ELF).await.expect("SP1 setup failed");
 
     let ProofRequest {
         pdf_bytes,
@@ -47,19 +47,19 @@ async fn prove(Json(body): Json<ProofRequest>) -> Json<SP1ProofWithPublicValues>
     stdin.write(&proof_input);
 
     let proof = client
-        .prove(&pk, &stdin)
+        .prove(&pk, stdin)
         .groth16()
-        .run()
+        .await
         .expect("failed to generate proof");
 
     Json(proof)
 }
 
 async fn verify(Json(proof): Json<SP1ProofWithPublicValues>) -> Json<VerifyResponse> {
-    let client = ProverClient::from_env();
-    let (_pk, vk) = client.setup(ZKPDF_ELF);
+    let client = ProverClient::from_env().await;
+    let pk = client.setup(ZKPDF_ELF).await.expect("SP1 setup failed");
 
-    match client.verify(&proof, &vk) {
+    match client.verify(&proof, pk.verifying_key(), None) {
         Ok(_) => Json(VerifyResponse {
             valid: true,
             error: None,

@@ -14,13 +14,13 @@ use alloy_sol_types::SolType;
 use clap::{Parser, ValueEnum};
 use serde::{Deserialize, Serialize};
 use sp1_sdk::{
-    include_elf, HashableKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey,
+    include_elf, HashableKey, ProveRequest, Prover, ProvingKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey,
 };
 use std::path::PathBuf;
 use zkpdf_lib::{types::PDFCircuitInput, PublicValuesStruct};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const ZKPDF_ELF: &[u8] = include_elf!("zkpdf-program");
+pub const ZKPDF_ELF: sp1_sdk::Elf = include_elf!("zkpdf-program");
 
 /// The arguments for the EVM command.
 #[derive(Parser, Debug)]
@@ -66,7 +66,8 @@ struct SP1ZkPdfProofFixture {
     proof: String,
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     // Setup the logger.
     sp1_sdk::utils::setup_logger();
 
@@ -80,14 +81,15 @@ fn main() {
     } = EVMArgs::parse();
 
     // Setup the prover client.
-    let client = ProverClient::from_env();
+    let client = ProverClient::from_env().await;
 
     // Load the PDF bytes from the provided path
     let pdf_bytes = std::fs::read(&pdf_path)
         .unwrap_or_else(|_| panic!("Failed to read PDF file at {}", pdf_path));
 
     // Setup the program.
-    let (pk, vk) = client.setup(ZKPDF_ELF);
+    let pk = client.setup(ZKPDF_ELF).await.expect("SP1 setup failed");
+    let vk = pk.verifying_key().clone();
 
     // Setup the inputs.
     let page_number: u8 = page;
@@ -112,8 +114,8 @@ fn main() {
 
     // Generate the proof based on the selected proof system.
     let proof = match system {
-        ProofSystem::Plonk => client.prove(&pk, &stdin).plonk().run(),
-        ProofSystem::Groth16 => client.prove(&pk, &stdin).groth16().run(),
+        ProofSystem::Plonk => client.prove(&pk, stdin).plonk().await,
+        ProofSystem::Groth16 => client.prove(&pk, stdin).groth16().await,
     }
     .expect("failed to generate proof");
 

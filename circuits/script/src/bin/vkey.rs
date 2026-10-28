@@ -1,10 +1,11 @@
-use sp1_sdk::{include_elf, HashableKey, Prover, ProverClient};
+use sp1_sdk::{include_elf, HashableKey, Prover, ProvingKey, ProverClient};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const ZKPDF_ELF: &[u8] = include_elf!("zkpdf-program");
+pub const ZKPDF_ELF: sp1_sdk::Elf = include_elf!("zkpdf-program");
 
-fn main() {
-    let prover = ProverClient::builder().cpu().build();
-    let (_, vk) = prover.setup(ZKPDF_ELF);
-    println!("{}", vk.bytes32());
+#[tokio::main]
+async fn main() {
+    let prover = ProverClient::builder().cpu().build().await;
+    let pk = prover.setup(ZKPDF_ELF).await.expect("SP1 setup failed");
+    println!("{}", pk.verifying_key().bytes32());
 }

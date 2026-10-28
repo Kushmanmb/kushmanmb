@@ -12,11 +12,11 @@
 
 use alloy_sol_types::SolType;
 use clap::Parser;
-use sp1_sdk::{include_elf, ProverClient, SP1Stdin};
+use sp1_sdk::{include_elf, ProveRequest, Prover, ProverClient, ProvingKey, SP1Stdin};
 use zkpdf_lib::{types::PDFCircuitInput, PublicValuesStruct};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const ZKPDF_ELF: &[u8] = include_elf!("zkpdf-program");
+pub const ZKPDF_ELF: sp1_sdk::Elf = include_elf!("zkpdf-program");
 
 /// The arguments for the command.
 #[derive(Parser, Debug)]
@@ -44,7 +44,8 @@ struct Args {
     offset: usize,
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     // Setup the logger.
     sp1_sdk::utils::setup_logger();
     dotenv::dotenv().ok();
@@ -65,7 +66,9 @@ fn main() {
     }
 
     // Setup the prover client.
-    let client = ProverClient::from_env();
+    eprintln!("DEBUG: Starting SP1 initialization");
+    let client = ProverClient::from_env().await;
+    eprintln!("DEBUG: SP1 initialization complete");
 
     // Load the PDF bytes from the provided path
     let pdf_bytes = std::fs::read(&pdf_path)
@@ -93,7 +96,7 @@ fn main() {
 
     if execute {
         // Execute the program
-        let (output, report) = client.execute(ZKPDF_ELF, &stdin).run().unwrap();
+        let (output, report) = client.execute(ZKPDF_ELF, stdin).await.unwrap();
         println!("Program executed successfully.");
 
         // Read the output.
@@ -115,18 +118,19 @@ fn main() {
         println!("Number of cycles: {}", report.total_instruction_count());
     } else {
         // Setup the program for proving.
-        let (pk, vk) = client.setup(ZKPDF_ELF);
+        let pk = client.setup(ZKPDF_ELF).await.expect("SP1 setup failed");
 
         // Generate the proof
         let proof = client
-            .prove(&pk, &stdin)
-            .run()
+            .prove(&pk, stdin)
+            .core()
+            .await
             .expect("failed to generate proof");
 
         println!("Successfully generated proof!");
 
         // Verify the proof.
-        client.verify(&proof, &vk).expect("failed to verify proof");
+        client.verify(&proof, pk.verifying_key(), None).expect("failed to verify proof");
         println!("Successfully verified proof!");
     }
 }

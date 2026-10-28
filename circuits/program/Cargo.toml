@@ -11,5 +11,5 @@ categories = ["cryptography", "no-std"]
 
 [dependencies]
 alloy-sol-types = { workspace = true }
-sp1-zkvm = "5.0.0"
+sp1-zkvm = "6.10.0"
 zkpdf-lib = { path = "../lib" }
