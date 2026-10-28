@@ -1,7 +1,6 @@
 [book]
 authors = ["Kushmanmb"]
 language = "en"
-multilingual = false
 src = "src"
 title = "ZKPDF Documentation"
 
@@ -10,7 +9,7 @@ mathjax-support = true
 default-theme = "light"
 preferred-dark-theme = "navy"
 git-repository-url = "https://github.com/Kushmanmb/kushmanmb"
-git-repository-icon = "fa-github"
+git-repository-icon = "fab-github"
 edit-url-template = "https://github.com/Kushmanmb/kushmanmb/edit/main/docs/{path}"
 
 [output.html.search]
@@ -27,4 +26,3 @@ heading-split-level = 3
 [output.html.playground]
 editable = true
 copyable = true
-copyable-method = "ferris"

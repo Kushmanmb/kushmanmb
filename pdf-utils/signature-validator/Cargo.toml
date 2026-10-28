@@ -20,9 +20,9 @@ num-traits = "0.2.19"
 thiserror = "1.0"
 
 # ECDSA
-p256 = { version = "0.13", features = ["ecdsa"] }
-p384 = { version = "0.13", features = ["ecdsa"] }
-signature = "2.2"
+p256 = { version = "0.14.0", features = ["ecdsa"] }
+p384 = { version = "0.14.0", features = ["ecdsa"] }
+signature = "3.0"
 
 [features]
 private_tests = []
