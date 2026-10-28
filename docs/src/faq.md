@@ -151,7 +151,7 @@ ZKPDF is designed to be extensible:
 
 ### What license does ZKPDF use?
 
-ZKPDF is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.
+ZKPDF is licensed under the MIT License. See the [LICENSE](https://github.com/Kushmanmb/kushmanmb/blob/main/LICENSE) file for details.
 
 ### Can I use ZKPDF commercially?
 
@@ -168,7 +168,7 @@ https://github.com/Kushmanmb/kushmanmb
 
 ## Next Steps
 
-- **[Examples](examples.md)**: Practical usage examples
+- **[Quick Start](quick-start.md)**: Practical usage examples
 - **[API Reference](api-reference.md)**: Complete API documentation
 - **[Proving](proving.md)**: Generate proofs from your circuits
 - **[Verification](verification.md)**: Verify proofs on-chain

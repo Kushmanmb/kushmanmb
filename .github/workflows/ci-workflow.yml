@@ -28,12 +28,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-
-      - name: Enable Corepack
-        run: corepack enable
+          cache: yarn
+          cache-dependency-path: app/yarn.lock
 
       - name: Install dependencies
         run: yarn install --immutable
+
+      - name: Typecheck
+        run: yarn test
 
       - name: Build
         run: yarn build

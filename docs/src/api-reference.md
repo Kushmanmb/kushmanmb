@@ -10,7 +10,7 @@ Complete reference for the ZKPDF library API with real examples from the codebas
 | `verify_gst_certificate` | GST certificate verification           | PDF bytes                     | GSTCertificate     | GST number and legal name extraction        |
 | `verify_text`            | Text verification at specific location | PDF bytes, page, offset, text | Boolean            | Verify text appears at exact position       |
 | `verify_and_extract`     | Simple verification and extraction     | PDF bytes                     | VerificationResult | Basic PDF verification with text extraction |
-| `extract_text`           | Text extraction only                   | PDF bytes                     | Vec<String>        | Extract all text from PDF pages             |
+| `extract_text`           | Text extraction only                   | PDF bytes                     | `Vec<String>`      | Extract all text from PDF pages             |
 | `verify_signature`       | Signature verification only            | PDF bytes                     | SignatureResult    | Validate digital signatures                 |
 
 ## Core Functions
@@ -404,7 +404,7 @@ declare function verify_pdf_signature(
 
 ## Next Steps
 
-- **[Examples](examples.md)**: Practical usage examples
+- **[Quick Start](quick-start.md)**: Practical usage examples
 - **[FAQ](faq.md)**: Common questions and answers
 - **[Proving](proving.md)**: Generate proofs from your circuits
 - **[Verification](verification.md)**: Verify proofs on-chain
