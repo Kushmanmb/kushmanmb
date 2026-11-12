@@ -419,6 +419,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@peculiar/utils@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@peculiar/utils@npm:4.1.0"
+  checksum: 10c0/9495260286bdec4be87ea7a4e47589d13831fec08e4b684164f2653366663b8def9252bc6b957c00ec927771fa26ade6ff7430006f0215d6ff4f81ac51ec82b4
+  languageName: node
+  linkType: hard
+
 "@swc/helpers@npm:0.5.15":
   version: 0.5.15
   resolution: "@swc/helpers@npm:0.5.15"
@@ -636,6 +643,15 @@ __metadata:
     pvutils: "npm:^1.1.3"
     tslib: "npm:^2.8.1"
   checksum: 10c0/7e79795edf1bcc86532c4084aa7c8c0ebc57f7dd6f964ad6de956abf617329722f6964b7af3a5d1c4554dd61b4b148ae1580e63e3ec2e70e7fba34f6df072b29
+  languageName: node
+  linkType: hard
+
+"asn1js@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "asn1js@npm:4.0.0"
+  dependencies:
+    "@peculiar/utils": "npm:^4.1.0"
+  checksum: 10c0/7fc48dc9cc4e37a7a0e4f8e296a4044c7677f1cae0f9cc058b0abd5d8d5430d8ff1966ec81b91823086964aaf0fad8b05bfcfd49bed9bac2fd7d15cde5321563
   languageName: node
   linkType: hard
 
@@ -1148,7 +1164,7 @@ __metadata:
     "@types/node": "npm:^24"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
-    asn1js: "npm:^3.0.6"
+    asn1js: "npm:^4.0.0"
     next: "npm:15.5.28"
     pkijs: "npm:^3.2.5"
     react: "npm:^19.0.0"

@@ -11,7 +11,7 @@
     "test": "tsc --noEmit"
   },
   "dependencies": {
-    "asn1js": "^3.0.6",
+    "asn1js": "^4.0.0",
     "next": "15.5.28",
     "pkijs": "^3.2.5",
     "react": "^19.0.0",
