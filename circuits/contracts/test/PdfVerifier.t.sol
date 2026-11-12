@@ -3,13 +3,18 @@ pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
 import {stdJson} from "forge-std/StdJson.sol";
-import {PdfVerifier} from "../src/PdfVerifier.sol";
+import {PdfVerifier, PublicValuesStruct} from "../src/PdfVerifier.sol";
 import {SP1VerifierGateway} from "@sp1-contracts/SP1VerifierGateway.sol";
 
 struct SP1ProofFixtureJson {
-    bool substringMatches;
+    // Field order must match the alphabetical key order used by vm.parseJson.
+    bytes32 messageDigestHash;
+    bytes32 nullifier;
     bytes proof;
     bytes publicValues;
+    bytes32 signerKeyHash;
+    bytes32 substringHash;
+    bool substringMatches;
     bytes32 vkey;
 }
 

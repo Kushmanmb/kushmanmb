@@ -157,7 +157,7 @@ The template includes both Groth16 and PLONK proof generation options, with Grot
 ## Next Steps
 
 - **[API Reference](./api-reference.md)**: Complete reference for zkPDF library functions and usage
-- **[Prover Network](./prover-network.md)**: Learn how to use the Succinct Prover Network for distributed proving
+- **[Prover Network](./proving/server-side.md)**: Learn how to use the Succinct Prover Network for distributed proving
 - **[Architecture](./architecture.md)**: Learn how ZKPDF works under the hood
 - **[Proving](./proving.md)**: Generate zero-knowledge proofs
 - **[Verification](./verification.md)**: Verify proofs on-chain

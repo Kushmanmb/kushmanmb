@@ -253,11 +253,11 @@ fn encode_public_key_to_der(public_key: &PublicKeyType) -> SignatureResult<Vec<u
             if *curve_oid == oid!(1, 2, 840, 10045, 3, 1, 7) {
                 let vk = P256VerifyingKey::from_sec1_bytes(public_key_point)
                     .map_err(|e| SignatureValidationError::InvalidEcdsaPublicKey(e.to_string()))?;
-                Ok(vk.to_encoded_point(false).as_bytes().to_vec())
+                Ok(vk.to_sec1_point(false).as_bytes().to_vec())
             } else if *curve_oid == oid!(1, 3, 132, 0, 34) {
                 let vk = P384VerifyingKey::from_sec1_bytes(public_key_point)
                     .map_err(|e| SignatureValidationError::InvalidEcdsaPublicKey(e.to_string()))?;
-                Ok(vk.to_encoded_point(false).as_bytes().to_vec())
+                Ok(vk.to_sec1_point(false).as_bytes().to_vec())
             } else {
                 Err(SignatureValidationError::EcdsaVerification(format!(
                     "Unsupported curve for public key encoding: {:?}",
@@ -396,7 +396,7 @@ mod tests {
 #[cfg(test)]
 mod ecdsa_tests {
     use super::*;
-    use rand_core::OsRng;
+    use p256::elliptic_curve::Generate;
 
     // P-256 unit tests
     // These use sign_prehash / verify_prehash so both sides agree on semantics:
@@ -406,14 +406,14 @@ mod ecdsa_tests {
     fn test_ecdsa_p256_valid_signature() {
         use p256::ecdsa::{signature::hazmat::PrehashSigner, SigningKey};
 
-        let signing_key = SigningKey::random(&mut OsRng);
+        let signing_key = SigningKey::try_generate().unwrap();
         let verifying_key = signing_key.verifying_key();
 
         let digest = Sha256::digest(b"Test message for ECDSA P-256");
 
         // sign_prehash: sign the raw digest WITHOUT internal re-hashing
         let sig: P256Signature = signing_key.sign_prehash(&digest).unwrap();
-        let point = verifying_key.to_encoded_point(false);
+        let point = verifying_key.to_sec1_point(false);
 
         let result = verify_p256_signature(point.as_bytes(), &digest, sig.to_der().as_bytes());
         assert!(result.is_ok());
@@ -424,13 +424,13 @@ mod ecdsa_tests {
     fn test_ecdsa_p256_wrong_key_rejected() {
         use p256::ecdsa::{signature::hazmat::PrehashSigner, SigningKey};
 
-        let signing_key = SigningKey::random(&mut OsRng);
-        let wrong_key = SigningKey::random(&mut OsRng);
+        let signing_key = SigningKey::try_generate().unwrap();
+        let wrong_key = SigningKey::try_generate().unwrap();
         let verifying_key = signing_key.verifying_key();
 
         let digest = Sha256::digest(b"Test message");
         let sig: P256Signature = wrong_key.sign_prehash(&digest).unwrap();
-        let point = verifying_key.to_encoded_point(false);
+        let point = verifying_key.to_sec1_point(false);
 
         let result = verify_p256_signature(point.as_bytes(), &digest, sig.to_der().as_bytes());
         assert!(result.is_ok());
@@ -444,14 +444,14 @@ mod ecdsa_tests {
     fn test_ecdsa_p256_tampered_digest_rejected() {
         use p256::ecdsa::{signature::hazmat::PrehashSigner, SigningKey};
 
-        let signing_key = SigningKey::random(&mut OsRng);
+        let signing_key = SigningKey::try_generate().unwrap();
         let verifying_key = signing_key.verifying_key();
 
         let original_digest = Sha256::digest(b"Original message");
         let tampered_digest = Sha256::digest(b"Tampered message");
 
         let sig: P256Signature = signing_key.sign_prehash(&original_digest).unwrap();
-        let point = verifying_key.to_encoded_point(false);
+        let point = verifying_key.to_sec1_point(false);
 
         let result =
             verify_p256_signature(point.as_bytes(), &tampered_digest, sig.to_der().as_bytes());
@@ -468,12 +468,12 @@ mod ecdsa_tests {
     fn test_ecdsa_p384_valid_signature() {
         use p384::ecdsa::{signature::hazmat::PrehashSigner, SigningKey};
 
-        let signing_key = SigningKey::random(&mut OsRng);
+        let signing_key = SigningKey::try_generate().unwrap();
         let verifying_key = signing_key.verifying_key();
 
         let digest = Sha384::digest(b"Test message for ECDSA P-384");
         let sig: P384Signature = signing_key.sign_prehash(&digest).unwrap();
-        let point = verifying_key.to_encoded_point(false);
+        let point = verifying_key.to_sec1_point(false);
 
         let result = verify_p384_signature(point.as_bytes(), &digest, sig.to_der().as_bytes());
         assert!(result.is_ok());
@@ -484,13 +484,13 @@ mod ecdsa_tests {
     fn test_ecdsa_p384_wrong_key_rejected() {
         use p384::ecdsa::{signature::hazmat::PrehashSigner, SigningKey};
 
-        let signing_key = SigningKey::random(&mut OsRng);
-        let wrong_key = SigningKey::random(&mut OsRng);
+        let signing_key = SigningKey::try_generate().unwrap();
+        let wrong_key = SigningKey::try_generate().unwrap();
         let verifying_key = signing_key.verifying_key();
 
         let digest = Sha384::digest(b"Test message");
         let sig: P384Signature = wrong_key.sign_prehash(&digest).unwrap();
-        let point = verifying_key.to_encoded_point(false);
+        let point = verifying_key.to_sec1_point(false);
 
         let result = verify_p384_signature(point.as_bytes(), &digest, sig.to_der().as_bytes());
         assert!(result.is_ok());

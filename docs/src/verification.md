@@ -98,6 +98,6 @@ forge create --rpc-url $RPC_URL \
 
 Now that you understand on-chain verification, you can:
 
-- **[Custom Circuits](./custom-circuits.md)**: Build custom verification logic
+- **[Custom Circuits](./architecture.md)**: Build custom verification logic
 - **[Proving](./proving.md)**: Set up proof generation workflows
 - **[Introduction](./introduction.md)**: Learn more about ZKPDF architecture
