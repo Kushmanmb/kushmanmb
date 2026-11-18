@@ -51,47 +51,28 @@ PRIVATE_KEY=...
 Then deploy the contract to the chain:
 
 ```sh
-forge create src/PdfVerifier.sol:PdfVerifier \
-  --rpc-url $RPC_URL \
-  --private-key $PRIVATE_KEY \
-  --constructor-args $VERIFIER $PROGRAM_VKEY
+forge create src/PdfVerifier.sol:PdfVerifier --rpc-url $RPC_URL --private-key $PRIVATE_KEY --constructor-args $VERIFIER $PROGRAM_VKEY
 ```
 
-## Etherscan Verification
+#### Step 4: Verify the contract (optional)
 
-Verifying the deployed contract on Etherscan allows anyone to inspect the
-source code and ABI directly from the block explorer.
+You can verify during deployment by adding `--verify --verifier etherscan --etherscan-api-key $ETHERSCAN_API_KEY` to the `forge create` command. Never commit your private key or API key.
 
-#### Option A: Verify at deploy time (recommended)
+For an already-deployed instance, use the following command with the original constructor arguments and the appropriate chain RPC URL.
 
-Pass `--verify` together with your Etherscan API key when deploying:
+If you deployed without the `--verify` flag, or if you need to verify a contract that was already deployed, use `forge verify-contract`:
 
 ```sh
-forge create src/PdfVerifier.sol:PdfVerifier \
+ETHERSCAN_API_KEY=...
+DEPLOYED_ADDRESS=...  # the address returned by forge create
+```
+
+```sh
+forge verify-contract $DEPLOYED_ADDRESS \
+  src/PdfVerifier.sol:PdfVerifier \
   --rpc-url $RPC_URL \
-  --private-key $PRIVATE_KEY \
-  --constructor-args $VERIFIER $PROGRAM_VKEY \
-  --verify \
   --verifier etherscan \
-  --etherscan-api-key $ETHERSCAN_API_KEY
-```
-
-#### Option B: Verify an already-deployed contract
-
-If the contract is already deployed, provide its address and the constructor
-arguments used at deployment:
-
-```sh
-forge verify-contract \
-  --chain-id 1 \
-  --constructor-args $(cast abi-encode "constructor(address,bytes32)" $VERIFIER $PROGRAM_VKEY) \
   --etherscan-api-key $ETHERSCAN_API_KEY \
-  <DEPLOYED_CONTRACT_ADDRESS> \
-  src/PdfVerifier.sol:PdfVerifier
+  --constructor-args $(cast abi-encode "constructor(address,bytes32)" $VERIFIER $PROGRAM_VKEY)
 ```
-
-Replace `--chain-id 1` with `11155111` for Sepolia.
-
-> **Tip:** `ETHERSCAN_API_KEY` can also be set permanently in `foundry.toml`
-> under `[etherscan]` (already configured for `mainnet` and `sepolia`).
 

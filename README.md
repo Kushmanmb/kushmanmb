@@ -1,181 +1,136 @@
-# Proving PDFs in ZKP
+# Hi there, I'm Kushmanmb 👋
 
-This repository contains tools for verifying PDF documents within zero-knowledge proof systems.
-Learn more in this blog post: https://pse.dev/blog/zkpdf-unlocking-verifiable-data
+**Blockchain Software Engineer | Smart Contract Developer | Bitcoin & Ethereum Protocol Specialist**
 
-## Why?
+Welcome to my GitHub profile! I'm a dedicated blockchain developer passionate about building secure, efficient, and innovative solutions across the Bitcoin and Ethereum ecosystems.
 
-Sometimes you need to prove that:
+---
 
-- A PDF is **signed by a trusted authority**
-- A specific **text appears on a given page** without revealing the entire document.
+## 🚀 About Me
 
-This repo enables such proving capability using SP1-based circuits.
+I'm a software engineer specializing in blockchain technology with deep expertise in smart contract development, DeFi applications, wallet architecture, and security. I'm committed to advancing blockchain protocols and building robust applications that push the boundaries of decentralized finance.
 
-## Structure
+- 🔗 Building on **Bitcoin** and **Ethereum** networks
+- 🛡️ Focused on **security** and **protocol maintenance**
+- 💰 Developing **DeFi applications** and innovative financial protocols
+- 🔐 Working on **wallet solutions** and custody systems
+- 🌱 Continuously learning and contributing to blockchain innovation
+- 💡 Open to collaboration on cutting-edge blockchain projects
 
-- **[pdf-utils/](pdf-utils/)** – Rust crates for:
-  - Validating PKCS#7 signatures (RSA-SHA256)
-  - Extracting Unicode text from PDF streams
-  - WebAssembly bindings for browser integration
-- **[circuits/](circuits/)** – SP1-compatible zero-knowledge circuits for signature and text proofs
-- **[app/](app/)** – Minimal React frontend to demo proof generation and verification
+---
 
-## Documentation
+## 🛠️ Technical Expertise
 
-- **[PDF Utils](pdf-utils/README.md)** - Core PDF processing libraries
-- **[Circuits](circuits/README.md)** - Zero-knowledge proof circuits
-- **[Circuit Library](circuits/lib/README.md)** -  Complete PDF verification library API
-- **[Extractor](pdf-utils/extractor/README.md)** - PDF text extraction
-- **[Signature Validator](pdf-utils/signature-validator/README.md)** - Digital signature verification
-- **[Core Library](pdf-utils/core/README.md)** - Combined PDF verification
-- **[WASM Bindings](pdf-utils/wasm/README.md)** - Browser-compatible API
+### Blockchain & Smart Contracts
+- **Smart Contract Development** - Solidity, Rust, Vyper
+- **Ethereum Ecosystem** - EVM, Layer 2 solutions, token standards
+- **Bitcoin Protocol** - Script, UTXO model, protocol maintenance
+- **DeFi Protocols** - AMMs, lending protocols, yield farming, derivatives
+- **Zero-Knowledge Proofs** - SP1, ZKP circuits, privacy-preserving systems
 
-## Installation
+### Development Tools & Frameworks
+- **Smart Contract Development:** Hardhat, Foundry, Truffle, Brownie
+- **Testing & Security:** OpenZeppelin, Slither, Mythril, Echidna
+- **Languages:** Solidity, Rust, Python, JavaScript/TypeScript, Go
+- **Blockchain Analysis:** Etherscan, Blockchair, custom indexers
+- **ZK Frameworks:** SP1, Circom, Noir
 
-Add the PDF verification library to your Rust project:
+### Specializations
+- ⭐ Smart Contract Development & Auditing
+- ⭐ DeFi Protocol Design & Implementation
+- ⭐ Wallet Architecture & Security
+- ⭐ Bitcoin & Ethereum Protocol Maintenance
+- ⭐ Security & Vulnerability Analysis
+- ⭐ Zero-Knowledge Proof Systems
+- ⭐ Blockchain Integration & Infrastructure
 
-```toml
-[dependencies]
-zkpdf-lib = { git = "https://github.com/Kushmanmb/kushmanmb", branch = "main", subdir = "circuits/lib" }
-```
+---
 
-## Quick Start
+## 💼 Key Areas of Focus
 
-```rust
-use zkpdf_lib::{verify_pdf_claim, PDFCircuitInput};
+### Smart Contracts
+Designing and implementing secure, gas-optimized smart contracts for various use cases including tokens, governance, and complex financial instruments.
 
-// Create input for PDF verification
-let input = PDFCircuitInput {
-    pdf_bytes: pdf_data,
-    page_number: 0,
-    offset: 100,
-    substring: "Important Document".to_string(),
-};
+### DeFi Applications
+Building decentralized finance protocols including automated market makers (AMMs), lending platforms, derivatives, and yield farming systems.
 
-// Verify PDF
-let result = verify_pdf_claim(input)?;
-```
+### Wallet Solutions
+Developing secure wallet implementations with focus on key management, multi-signature schemes, and custody solutions.
 
-## How it Works
+### Protocol Maintenance
+Contributing to Bitcoin and Ethereum protocol improvements, maintaining consensus mechanisms, and ensuring network security and efficiency.
 
-1. **Parse the PDF** using pure Rust (no OpenSSL or C deps)
-2. **Generate a zk proof** using SP1 circuits
-3. **Verify** the proof on-chain or off-chain
+### Security
+Conducting thorough security analysis, vulnerability assessments, and implementing best practices to protect user funds and protocol integrity.
 
-## Setup
+### Zero-Knowledge Systems
+Implementing advanced cryptographic proofs for privacy-preserving applications and on-chain verification systems.
 
-Follow these steps to run the prover API and the demo frontend.
+---
 
-### Requirements
+## 📊 Featured Projects
 
-- [Rust](https://rustup.rs/)
-- [Node.js 18+](https://nodejs.org/)
-- [SP1](https://docs.succinct.xyz/docs/sp1/getting-started/install)
+### [Proving PDFs in ZKP](https://github.com/Kushmanmb/Kushmanmb)
+Tools for verifying PDF documents within zero-knowledge proof systems. Enables proving that PDFs are signed by trusted authorities and contain specific text without revealing entire documents.
 
-### 1. Clone the Repository
+- **Tech Stack:** Rust, SP1, Solidity, React, WebAssembly
+- **Key Features:** PKCS#7 signature validation, PDF text extraction, ZK circuits for on-chain verification
 
-```bash
-git clone git@github.com:Kushmanmb/kushmanmb
-cd kushmanmb
-```
+---
 
-### 2. Run the Prover API
+### zkPDF verifier contract
 
-Start the prover service from the `circuits/script` directory. If you have access to the Succinct Prover Network, export your API key and run:
+The [zkPDF Solidity verifier](circuits/contracts/src/PdfVerifier.sol) verifies SP1 proofs and returns five circuit-attested fields: `substringMatches`, `messageDigestHash`, `signerKeyHash`, `substringHash`, and `nullifier`. See the [contract deployment and Etherscan verification guide](circuits/contracts/README.md). The contract performs proof verification but does not itself maintain a spent-nullifier registry; callers requiring one-time use must enforce it separately.
 
-```bash
-cd circuits/script
-SP1_PROVER=network \
-NETWORK_PRIVATE_KEY=<PROVER_NETWORK_KEY> \
-RUST_LOG=info \
-cargo run --release --bin prover
-```
+## 📊 GitHub Activity
 
-This will start the prover API on port **3001**.
+![GitHub Stats](profile/stats.svg)
 
-> **Note:** If you don’t have access to the Succinct Prover Network, you can omit the environment variables to run the prover locally. (This will take longer.)
->
-> For local proof generation, refer to `scripts/evm.rs` or run:
+---
 
-```bash
-RUST_LOG=info cargo run --release --bin evm -- --system groth16
-```
+## 🌐 Connect With Me
 
-### 3. Run the Frontend
+- **X (Twitter):** [@kushmannmb](https://x.com/kushmannmb)
+- **GitHub:** [@Kushmanmb](https://github.com/Kushmanmb)
+- 📧 Open to inquiries for collaboration and opportunities
 
-In a separate terminal, build the WASM module and start the Next.js app:
+---
 
-```bash
-# Build WASM module (requires Rust + wasm-pack)
-cd pdf-utils/wasm && ./generate_wasm.sh && cd ../../app
+## 🎯 Current Interests
 
-# Start the frontend
-yarn install
-yarn dev
-```
+- 🔬 Advanced smart contract security and optimization
+- 🌉 Cross-chain interoperability and bridge protocols
+- 📈 DeFi innovation and new financial primitives
+- 🔐 Zero-knowledge proofs and privacy-preserving technologies
+- 🚀 Scaling solutions and protocol improvements
+- 🔄 Sustainable blockchain infrastructure
 
-Visit [http://localhost:3000](http://localhost:3000) to view the interface.
+---
 
-https://github.com/user-attachments/assets/
+## 📖 Philosophy
 
-## Use Cases
+I believe in building blockchain technology that is:
+- **Secure** - Prioritizing user safety and protocol integrity
+- **Efficient** - Optimizing for performance and cost-effectiveness
+- **Decentralized** - Maintaining the core principles of blockchain technology
+- **Accessible** - Making blockchain solutions available to everyone
+- **Innovative** - Pushing the boundaries of what's possible in Web3
 
-- Prove that a document is signed without showing its contents
-- Selectively reveal fields from government-issued certificates
-- Use verified document facts in smart contracts
+---
 
-## Smart Contract
+## 💡 Let's Collaborate!
 
-The on-chain verifier contract is located at
-[`circuits/contracts/src/PdfVerifier.sol`](circuits/contracts/src/PdfVerifier.sol).
+I'm always interested in:
+- 🤝 Contributing to open-source blockchain projects
+- 💬 Discussing protocol improvements and innovations
+- 🔍 Security audits and code reviews
+- 🚀 Building the next generation of DeFi applications
+- 📚 Knowledge sharing and community engagement
 
-It exposes a single entry-point:
+**Feel free to reach out if you'd like to collaborate on blockchain projects or discuss the future of decentralized finance!**
 
-```solidity
-function verifyPdfProof(
-    bytes calldata _publicValues,
-    bytes calldata _proofBytes
-) external returns (PublicValuesStruct memory publicValues);
-```
+---
 
-Where `PublicValuesStruct` carries five attested fields:
+⭐️ If you find my work interesting, consider starring my repositories. Thanks for visiting!
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `substringMatches` | `bool` | True when the substring was found at the given page/offset |
-| `messageDigestHash` | `bytes32` | keccak256 of the PDF's PKCS#7 message digest |
-| `signerKeyHash` | `bytes32` | keccak256 of the signer's RSA public key |
-| `substringHash` | `bytes32` | keccak256 of the queried substring |
-| `nullifier` | `bytes32` | Domain-separated nullifier preventing proof replay |
-
-### Verifying the Contract on Etherscan
-
-See [`circuits/contracts/README.md`](circuits/contracts/README.md) for full
-deployment and Etherscan verification instructions.
-
-## Security
-
-### Audit Summary
-
-A code security audit was performed covering the Solidity contract, Rust
-circuit library, and prover/verifier scripts. The following issues were
-identified and remediated:
-
-| # | Severity | Location | Issue | Status |
-|---|----------|----------|-------|--------|
-| 1 | **High** | `PdfVerifier.sol` | `PublicValuesStruct` had only `bool result` — mismatched ABI would cause incorrect decoding of all proof outputs | ✅ Fixed |
-| 2 | **High** | `PdfVerifier.sol` | `verifyPdfProof` returned `bool` instead of `PublicValuesStruct` — callers had no access to hashes or nullifier | ✅ Fixed |
-| 3 | **Medium** | `PdfVerifier.sol` | No zero-address check on `_verifier` constructor argument — `address(0)` would make all proof calls silently succeed | ✅ Fixed |
-| 4 | **Medium** | `PdfVerifier.sol` | `verifier` and `programVKey` were mutable storage variables — a compromised deployer key could swap the verifier for a malicious contract | ✅ Fixed (marked `immutable`) |
-| 5 | **Low** | `PdfVerifier.sol` | No events emitted — on-chain verification activity was unmonitorable | ✅ Fixed (`PdfProofVerified` event added) |
-| 6 | **Low** | `PdfVerifier.t.sol` | Test file referenced undefined struct fields and mismatched return type causing test suite to not compile | ✅ Fixed |
-| 7 | **Info** | `foundry.toml` | No Etherscan API configuration — contract verification required manual CLI flags | ✅ Fixed |
-
-> **Responsible Disclosure:** To report a security vulnerability, please
-> e-mail **security@example.com** (also declared via `@custom:security-contact`
-> in the contract NatSpec).
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+**Let's build the future of blockchain together.** 🔗✨

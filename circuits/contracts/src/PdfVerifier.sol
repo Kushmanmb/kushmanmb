@@ -30,9 +30,7 @@ struct PublicValuesStruct {
 ///         PDF that carries a valid PKCS#7 digital signature.
 /// @dev    Wraps the SP1VerifierGateway and ABI-decodes the five public values
 ///         committed by the zkPDF program.  Both `verifier` and `programVKey`
-///         are immutable after construction to prevent privilege-escalation
-///         attacks that could swap the verifier for a malicious contract.
-/// @custom:security-contact security@example.com
+///         are immutable after construction to avoid post-deployment changes.
 contract PdfVerifier {
     // -------------------------------------------------------------------------
     // State

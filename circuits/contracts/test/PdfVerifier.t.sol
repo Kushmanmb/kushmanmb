@@ -7,9 +7,14 @@ import {PdfVerifier, PublicValuesStruct} from "../src/PdfVerifier.sol";
 import {SP1VerifierGateway} from "@sp1-contracts/SP1VerifierGateway.sol";
 
 struct SP1ProofFixtureJson {
-    bool substringMatches;
+    // Field order must match the alphabetical key order used by vm.parseJson.
+    bytes32 messageDigestHash;
+    bytes32 nullifier;
     bytes proof;
     bytes publicValues;
+    bytes32 signerKeyHash;
+    bytes32 substringHash;
+    bool substringMatches;
     bytes32 vkey;
 }
 
@@ -48,6 +53,12 @@ contract PdfVerifierGroth16Test is Test {
         assertEq(publicValues.nullifier, expected.nullifier);
     }
 
+    function testRevert_ZeroVerifierAddress() public {
+        SP1ProofFixtureJson memory fixture = loadFixture();
+        vm.expectRevert("PdfVerifier: zero verifier address");
+        new PdfVerifier(address(0), fixture.vkey);
+    }
+
     function testRevert_InvalidPdfProof() public {
         vm.expectRevert();
 
@@ -56,12 +67,6 @@ contract PdfVerifierGroth16Test is Test {
         bytes memory fakeProof = new bytes(fixture.proof.length);
 
         pdfVerifier.verifyPdfProof(fixture.publicValues, fakeProof);
-    }
-
-    function testRevert_ZeroVerifierAddress() public {
-        SP1ProofFixtureJson memory fixture = loadFixture();
-        vm.expectRevert("PdfVerifier: zero verifier address");
-        new PdfVerifier(address(0), fixture.vkey);
     }
 }
 
@@ -73,7 +78,7 @@ contract PdfVerifierPlonkTest is Test {
 
     function loadFixture() public view returns (SP1ProofFixtureJson memory) {
         string memory root = vm.projectRoot();
-        string memory path = string.concat(root, "/src/fixtures/groth16-fixture.json");
+        string memory path = string.concat(root, "/src/fixtures/plonk-fixture.json");
         string memory json = vm.readFile(path);
         bytes memory jsonBytes = json.parseRaw(".");
         return abi.decode(jsonBytes, (SP1ProofFixtureJson));
